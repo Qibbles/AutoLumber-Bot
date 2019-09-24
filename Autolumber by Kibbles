@@ -20,6 +20,10 @@
 ///
 /// Recall to your first lumber spot, run the script, and profit!
 /// 
+/// Permissions:
+/// You may use and distribute this script as you wish. For any modifications, please submit a pull request onto the github project page at: https://github.com/Qibbles/UOF-Fully-Automated-Lumberjack.
+///
+/// If you would like to fork this script as a base for your own, please provide credits to me :)
 
 function AutoLumber()
 {

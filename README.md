@@ -1,6 +1,6 @@
-# Public-UO-Macros
+# AutoLumber Bot
 
-This is a fully automated lumberjack script for the Orion client on the UO Forever Shard by Kibbles.
+This is a fully automated lumberjack script for the Orion client on the UO Forever Shard by Kibbles. 
 
 If you wish to contribute to the project or just talk about anything, please feel free to hit me up on discord. 
 

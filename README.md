@@ -2,7 +2,9 @@
 
 This is a fully automated lumberjack script for the Orion client on the UO Forever Shard by Kibbles.
 
-If you wish to contribute to the project or just talk about anything, please feel free to hit me up on discord. My username is Kibbles#9429.
+If you wish to contribute to the project or just talk about anything, please feel free to hit me up on discord. 
+
+My discord username is Kibbles#9429.
 
 ## Requirements:
 Lumberjacker skills:

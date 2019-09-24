@@ -33,7 +33,6 @@ function AutoLumber()
     var bankbagSerial = "0x43C7F581"
 
     // Do not change anything below
-    Orion.AddObject('', OL);
 	var lumberLocation = 11; // Current location
 	Orion.Exec('Sentinel',true, ['1', '1', '0', '0', '1', runebookSerial, '5']);
 	var bandageTimer = 0;

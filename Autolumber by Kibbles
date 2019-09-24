@@ -1,0 +1,485 @@
+///
+///	Fully automated LJ
+///		by Kibbles
+///
+///	Things to change:
+///	1) runebook serial
+///	2) Reg bag serial (If magery >= 64 for 100% recall)
+///	3) Drop bag serial
+///
+
+function AutoLumber()
+{
+	//Orion.CancelWaitGump();
+	//Orion.Say('Bank');
+	//Orion.Wait(1000);
+	//Lumber1Restock();
+	//Orion.Wait(500);
+	var lumberLocation = 11; // Current location
+	//lumberLocation = lumberLocation + 6; // Go next location
+	//Recall(1, 0x411195DE, lumberLocation);
+	//Orion.Wait(500);
+	Orion.Exec('Sentinel',true, ['1', '1', '0', '0', '1', '0x411195DE', '5']);
+	var bandageTimer = 0;
+	var axeSerial = EquipAxe();	
+	var treeCoords = FindTrees(30);
+	while (treeCoords.length > 0)
+	{
+		Orion.CancelWaitGump();
+		var mobs = Orion.FindType('0xFFFF','0xFFFF', ground, 'near|mobile',  '2', 'gray|criminal|red');	
+		if (mobs.length)
+		{
+			Orion.CharPrint('self', 30, "Creature nearby -- Killing!");
+			FightMob(mobs[0]);
+		}
+		if (Player.Weight() >= Player.MaxWeight() - 10)
+		{
+			Recall(1, 0x411195DE, 5);
+			Orion.Wait(500);
+			Orion.CancelWaitGump();
+			Orion.Say('Bank');
+			Orion.Wait(1000);
+			Lumber1Restock();
+			Orion.Wait(500);
+			Lumber1ToChest();
+			Orion.Wait(5000);
+			if (lumberLocation >= 35)
+			{
+				lumberLocation = 11; // Reset back to 2nd location in book
+			} else {
+				lumberLocation = lumberLocation + 6; // Next button ID
+			}
+			Recall(1, 0x411195DE, lumberLocation);
+			Orion.Wait(500);
+			Orion.Exec('Sentinel',true, ['1', '1', '0', '0', '1', '0x411195DE', '5']);
+			var axeSerial = EquipAxe();	
+			var treeCoords = FindTrees(30);
+		}
+     		PrintSelf(treeCoords.length + ' trees remaining');    	
+     		var closest = GetClosest(treeCoords);
+     		var treeCoord = treeCoords[closest];        
+     		treeCoords = Remove(treeCoords, closest);
+        
+     		MakeLastCarpentry();
+     		Orion.Wait(500);
+        
+     		Orion.WalkTo(treeCoord.x, treeCoord.y, 0);
+        
+    		var timeout = Orion.Now() + 3000;
+        
+       	while (!InRange(treeCoord.x, treeCoord.y) && Orion.Now() < timeout)
+       	{
+          		PrintSelf('.');
+     	      	Orion.Wait(200);
+       	}
+        
+       	if (InRange(treeCoord.x, treeCoord.y))
+       	{
+       	    	LumberTree(treeCoord.x, treeCoord.y, axeSerial);
+       	}
+ 	     	PrintSelf('Tree Finished');
+   	 }
+
+		MakeLastCarpentry();
+		Orion.Wait(500);
+		PrintSelf('Finished');
+		Orion.Wait(1000);
+		Orion.UseSkill('hiding');
+		lumberLocation = lumberLocation + 6; // Go next location
+		Orion.Exec('AutoLumber1', false);
+}
+
+function LumberRestock(){  
+    var bagserial = Orion.FindObject('Lumber1BankRegBag').Serial();
+    Orion.UseObject(bagserial);
+    Orion.Wait(500);
+    if (Orion.FindObject('Lumber1BankRegBag') == null)
+        return;
+
+    var restock = [
+    ['0x0F88',0], //ns
+    ['0x0F7B',10], //bm
+    ['0x0F7A', 10], //bp
+    ['0x0F84', 0], //ga
+    ['0x0F8C', 0], //sa
+    ['0x0F85', 0], //gs
+    ['0x0F86', 10], //mr
+    ['0x0F8D', 0], //ss
+    ['0x0E21', 40], //bandage
+
+    ['0x1F4C', 0] //recallscroll
+    ];
+   
+    var countrows = restock.length;
+    Orion.Print(countrows + ' items to restock');
+    for (i=0; i < countrows-1; i++){
+        // Verify if more is needed
+        var bagitem = Orion.Count(restock[i][0]);
+        if (bagitem < restock[i][1]){
+            itemfound = Orion.FindType(restock[i][0], '-1', bagserial);
+            if (itemfound.length){
+                Orion.MoveItem(itemfound[0], restock[i][1]-bagitem);
+                Orion.Wait(600);
+            }
+        }
+    }
+}
+
+function LumberToChest()
+{
+	Orion.Say('Bank');
+	var chest = '0x40E0DC70';
+	var sorttobag= Orion.FindList('LumberLoot', 'backpack', '', 1);
+	if(sorttobag.length)
+	{
+		var sort = sorttobag.length;
+		for (i = 0; i < sort; i++)
+		{
+			Orion.MoveItem(sorttobag[i], 0, chest);
+			Orion.Wait(600);
+		}
+	}
+}
+
+// Helper functions for AutoLumber
+function Remove(arr, idx)
+{
+    var result = [];
+    for (var i = 0; i < arr.length; ++i)
+    {
+        if (i != idx)
+        {
+	        result.push(arr[i]);
+	  }
+    }
+    
+    return result;
+}
+
+function FindTrees(range)
+{
+    var d = range;
+    
+    var treeCoords = [];
+    
+    var found = 0;
+    
+    for (x = Player.X() - d; x < Player.X() + d; ++x)
+    {
+        for (y = Player.Y() - d; y < Player.Y() + d; ++y)
+        {
+            if (Orion.ValidateTargetTile('tree', x, y))
+            {
+                PrintSelf('Tree at ' + x + ',' + y);
+            
+                var coord = { x: x, y: y};            
+                treeCoords.push(coord);
+            
+                found++;                
+            }
+        }
+    
+    }
+    
+    PrintSelf('Found ' + found + ' trees');
+    return treeCoords;
+}
+
+function GetClosest(treeCoords)
+{
+    var px = Player.X();
+    var py = Player.Y();
+    
+    var closest = 0;
+    var dsq = 1000;
+    
+    for (var i =0; i < treeCoords.length; ++i)
+    {
+        var dx = Math.abs(px - treeCoords[i].x);
+        var dy = Math.abs(py - treeCoords[i].y);
+    
+        var dq = dx + dy;
+        
+        if (dq < dsq)
+        {
+            dsq = dq;
+            closest = i;
+        }
+    }
+    
+    return closest;
+}
+
+function InRange(x, y)
+{
+    var dx = Math.abs(Player.X() - x);
+    var dy = Math.abs(Player.Y() - y);
+    
+    return dx < 2 && dy < 2;    
+}
+
+function LumberTree(x, y, axeSerial)
+{
+    var success = 'You put some logs into your backpack.';
+    var fail = 'You hack at the tree for a while, but fail to produce any useable wood.';
+    var end = 'There\'s not enough wood here to harvest.';
+    var tooFar = 'That is too far away';
+    var snake = "You have dislodged a serpent from the tree.";
+    var noAxe = "The axe must be equipped for any serious wood chopping.";
+    var timeout = Orion.Now() + 2000;
+            
+    while (true)
+    {
+        Orion.ClearJournal(success);
+        Orion.ClearJournal(fail);
+        Orion.ClearJournal(end);
+        Orion.ClearJournal(tooFar);
+        Orion.ClearJournal(snake);
+        Orion.UseObject(axeSerial);
+        Orion.WaitTargetTile('tree', x, y, 0);        
+     
+        var timeout = Orion.Now() + 2000;
+            
+        while (!(Orion.InJournal(success) 
+            || Orion.InJournal(fail)
+            || Orion.InJournal(end) 
+            || Orion.InJournal(tooFar)
+            || Orion.Now() > timeout)) 
+        {
+            Orion.Wait(200);
+            if (Orion.InJournal(noAxe))
+            {
+            	EquipAxe();
+            	Orion.ClearJournal(noAxe);
+            }
+            if (Orion.InJournal(snake))
+            {
+            	var snake =  Orion.FindType('0x0015', '0xFFFF', '-1', ground, 'near|mobile', '12', 'red|gray|criminal');
+            	FightMob(snake);
+            }
+        }      
+
+        if (Orion.InJournal(end) || Orion.InJournal(tooFar))
+            return;
+    
+    }            
+}
+
+function FightMob(mobs) 
+{
+	var mobObject = Orion.FindObject(mobs);
+	while (mobObject.Mobile())
+	{
+		var mobX = mobObject.X();
+		var mobY = mobObject.Y();
+		Orion.WalkTo(mobX, mobY, 0);
+		Orion.Attack(mobs);
+		Orion.Wait(100);
+	}
+	Orion.CharPrint('self', 30, 'Creature killed, looting corpse');
+	LumberLoot();
+	return;
+}
+
+function LumberLoot()
+{
+    //1 - loot all; 0 - loot prioritized items
+    var all = 1;
+    //1 - ignore list, 0 - do not ignore
+    var clear = 1;
+    //1 - use skinning
+    var useSkining = 0;
+    FastLoot('LumberLoot', all, clear, useSkining);
+}
+
+function FastLoot(listName, all, clear, useSkining)
+{
+    var corpse = FindCorpse();
+
+    if (corpse == null)
+    {
+        Orion.ResetIgnoreList();
+        Orion.IgnoreReset();
+        Orion.Print('-1', 'No more corpses found. Reseting list.');
+        Orion.Print('-1', 'No more corpses found. Reseting list.');
+        Orion.Print('-1', 'No more corpses found. Reseting list.');
+    }
+    else
+    {
+        Orion.AddObject('corpse', corpse.Serial());
+        if (useSkining == 1)
+            Skining();
+        Orion.UseObject('corpse');
+        Orion.Wait('200');
+        LootLag();
+        Loot(listName, all, clear, useSkining);
+    }
+}
+
+function LootLag()
+{
+    var timer = Orion.Now() + 300;
+
+    while (!Orion.FindType('-1', '-1', 'corpse').length && timer > Orion.Now())
+        Orion.Wait(50);
+}
+
+function Loot(listName, all, clear, useSkining)
+{
+    var bag = '0x0E75';
+
+    var lootBagList = Orion.FindType(bag);
+
+    if (lootBagList.length)
+        Orion.AddObject('lootpack', lootBagList[0]);
+    else
+        Orion.AddObject('lootpack', Orion.GetSerial(backpack));
+
+    LootByFindList(listName);
+
+    if (all == 1)
+    {
+        if (clear == 1)
+            Orion.UseIgnoreList('ignoreLoot');
+        else
+            Orion.ResetIgnoreList();
+
+        LootAll();
+
+        Orion.ResetIgnoreList();
+    }
+}
+
+function LootItems(list)
+{
+    if (!list.length)
+        return false;
+
+    for (var i = 0; i < list.length; i++)
+    {
+        if (Orion.GetDistance('corpse') > 2)
+            return false;
+
+        Orion.MoveItem(list[i], 0, 'lootpack');
+        Orion.Wait(100);
+    }
+
+    return true;
+}
+
+function LootByFindList(listName)
+{
+    while (LootItems(Orion.FindList(listName, 'corpse')))
+        Orion.Wait(50);
+    Orion.Ignore('corpse');
+}
+
+function LootAll()
+{
+	while (LootItems(Orion.FindType('-1', '-1', 'corpse')))
+		Orion.UseIgnoreList('ignoreLoot');
+		Orion.Wait(50);
+}
+
+
+function EquipAxe()
+{
+	Orion.Unequip(2);
+	Orion.Wait(1000);
+	
+	var axeType = [
+    	['0x0F4B'], //double axe
+    	['0x13FB'], //large battle axe
+    	['0x0F47'],
+    	['0x1443'],
+    	['0x13B0'], //war axe
+    	['0x0F45'], //executioner's axe
+    	['0x0F43'], //hatchet
+
+    	];
+    	
+    	var countRows = axeType.length;
+    	for (i = 0; i < countRows; i++)
+    	{
+    		var bagAxe = Orion.FindType(axeType[i], '0xFFFF', 'backpack');
+    		if (bagAxe.length != 0)
+    		{
+    			var axe = bagAxe;
+    			PrintSelf('Equiping Axe ' + axe);
+			Orion.Equip(axe);
+			Orion.Wait(500);
+			return axe;
+    		} else {
+    			var axe = "";
+    		}
+    	}	
+	if (axes.length == 0)
+	{
+		PrintSelf('Missing Axe');
+		return '';
+	}
+    
+	//var axe = axes[0];  
+	//PrintSelf('Equiping Axe ' + axe);
+	//Orion.Equip(axe);
+	//Orion.Wait(500);
+    
+	//return axe;
+}
+
+function MakeLastCarpentry()
+{
+    Orion.CancelWaitGump();
+    Orion.WaitGump(Orion.CreateGumpHook(21));   
+
+    var carpentryToolType = '0x1032';        
+    Orion.UseType(carpentryToolType);
+}
+
+function PrintSelf(msg)
+{
+    var oldUse = Orion.OptionScaleSpeech();
+	var oldDelay = Orion.OptionScaleSpeechDelay();
+    Orion.OptionScaleSpeech(true);
+	Orion.OptionScaleSpeechDelay(50);
+
+    Orion.CharPrint('self', '30', msg);
+    
+    Orion.Wait(50);
+    Orion.OptionScaleSpeech(oldUse);
+	Orion.OptionScaleSpeechDelay(oldDelay);
+}
+
+function Recall(magery, runebook, runeLocation)
+{
+	var disturbed = 'Your concentration is disturbed';
+	var recallTimer = Orion.Now() + 4000;
+	Orion.ClearJournal(disturbed);
+	if (magery == 1)
+	{
+		Orion.UseObject(runebook);
+		Orion.Wait(1000);
+		Orion.CharPrint(self, 2419, runeLocation);
+		var gumpObject = Orion.GetLastGump();
+		var hook = Orion.CreateGumpHook(runeLocation);
+		gumpObject.Select(hook);
+		Orion.CancelWaitGump();
+	} else {
+		Orion.UseObject(runebook);
+		Orion.Wait(1000);
+		Orion.CharPrint(self, 2419, runeLocation);
+		var gumpObject = Orion.GetLastGump();
+		var hook = Orion.CreateGumpHook(runeLocation);
+		gumpObject.Select(hook);
+		Orion.CancelWaitGump();
+	}
+	while (Orion.Now() < recallTimer)
+	{
+		if (!Orion.InJournal(disturbed))
+		{
+			Orion.Wait(100);
+		} else {	
+			Recall(magery, runebook, runeLocation);
+		}
+	}
+}

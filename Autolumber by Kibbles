@@ -23,7 +23,8 @@
 /// Permissions:
 /// You may use and distribute this script as you wish. For any modifications, please submit a pull request onto the github project page at: https://github.com/Qibbles/UOF-Fully-Automated-Lumberjack.
 ///
-/// If you would like to fork this script as a base for your own, please provide credits to me :)
+/// You may also fork this repo as a base for your own, as long as there are proper credits ;)
+///
 
 function AutoLumber()
 {
@@ -75,7 +76,6 @@ function AutoLumber()
      		var treeCoord = treeCoords[closest];        
      		treeCoords = Remove(treeCoords, closest);
         
-     		MakeLastCarpentry();
      		Orion.Wait(500);
         
      		Orion.WalkTo(treeCoord.x, treeCoord.y, 0);
@@ -94,12 +94,6 @@ function AutoLumber()
        	}
  	     	PrintSelf('Tree Finished');
    	 }
-
-		MakeLastCarpentry();
-		Orion.Wait(500);
-		PrintSelf('Finished');
-		Orion.Wait(1000);
-		Orion.UseSkill('hiding');
 		lumberLocation = lumberLocation + 6; // Go next location
 		Orion.Exec('AutoLumber', false);
 }
@@ -428,13 +422,6 @@ function EquipAxe()
 		PrintSelf('Missing Axe');
 		return '';
 	}
-    
-	//var axe = axes[0];  
-	//PrintSelf('Equiping Axe ' + axe);
-	//Orion.Equip(axe);
-	//Orion.Wait(500);
-    
-	//return axe;
 }
 
 function Recall(magery, runebook, runeLocation)

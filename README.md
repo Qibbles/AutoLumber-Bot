@@ -27,7 +27,7 @@ Spellbook:
 - Fully charged with Recall scrolls (optional)
 
 Equipment:
-- GM Axes (Double axes are the best)
+- GM Axes (Double axes are the best). You may use any axe; script will detect and equip the appropriate axe. To avoid errors, only have 1 axe in your bag. 
 - 5-10 of each Recall Reagents (Black Pearl, Blood Moss, Mandrake Root). You may set the quantity to be restocked in the script
 - 40 bandaids (recommended). You may bring more if your skills are low and it takes a long time to kill the snakes
 - Runebook with 6 runes (Bank rune in position 1, 5 locations to LJ). You may add as many LJ location runes as you wish

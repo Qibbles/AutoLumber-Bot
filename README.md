@@ -28,7 +28,7 @@ Things to set in the script:
     3) Drop bag serial (This is a bag in your bank to deposit your gold and logs)
     4) Create a list called 'LumberLoot' with all the items you would like to unload to your bank
     5) Create an ignore list called 'ignoreLoot' for the items you do not wish to loot
-    6) Recall to your first lumber spot, run the script, and profit!
+    6) Recall to your first lumber spot, run the script (AutoLumber()), and profit!
 
 Enjoy!
 

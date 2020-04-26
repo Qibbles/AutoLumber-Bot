@@ -457,3 +457,17 @@ function Recall(magery, runebook, runeLocation)
 		}
 	}
 }
+
+function PrintSelf(msg)
+{
+    var oldUse = Orion.OptionScaleSpeech();
+	var oldDelay = Orion.OptionScaleSpeechDelay();
+    Orion.OptionScaleSpeech(true);
+	Orion.OptionScaleSpeechDelay(50);
+
+    Orion.CharPrint('self', '30', msg);
+    
+    Orion.Wait(50);
+    Orion.OptionScaleSpeech(oldUse);
+	Orion.OptionScaleSpeechDelay(oldDelay);
+}

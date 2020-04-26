@@ -320,6 +320,17 @@ function FastLoot(listName, all, clear, useSkining)
     }
 }
 
+function FindCorpse()
+{
+    var list = Orion.FindType('0x0ECD|0x2006|0x0ECA|0x0ECC|0x0E40|0x0E41|0x0ECE', '-1', ground, 'fast', '2');
+
+    if (list.length)
+    {       
+        return Orion.FindObject(list[0]);       
+    }
+    return null;
+}
+
 function LootLag()
 {
     var timer = Orion.Now() + 300;

@@ -32,7 +32,7 @@
 /// You may also fork this repo as a base for your own, as long as there are proper credits ;)
 ///
 
-function AutoLumber()
+function AutoLumber() // Main script to run
 {
     // Change these variable values
     var runebookSerial = "0x411195DE" // Serial number of your runebook

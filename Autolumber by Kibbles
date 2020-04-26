@@ -18,14 +18,13 @@
 /// - 64 Magery
 /// - Anything you wish
 ///
-///	Things to set in the script:
-///	1) Runebook serial (Your runebook should have a bank spot rune and a recommended 5 or more lumber spots)
-///	2) Reg bag serial (This is a bag in your bank with the required reagents for recalling - BP | BM | MR)
-///	3) Drop bag serial (This is a bag in your bank to deposit your gold and logs)
-/// 4) Create a list called 'LumberLoot' with all the items you would like to unload to your bank
-/// 5) Create an ignore list called 'ignoreLoot' for the items you do not wish to loot
-///
-/// Recall to your first lumber spot, run the script, and profit!
+/// Things to set in the script:
+///    1) Runebook serial (Your runebook should have a bank spot rune and a recommended 5 or more lumber spots)
+///    2) Reg bag serial (This is a bag in your bank with the required reagents for recalling - BP | BM | MR)
+///    3) Drop bag serial (This is a bag in your bank to deposit your gold and logs)
+///    4) Create a list called 'LumberLoot' with all the items you would like to unload to your bank
+///    5) Create an ignore list called 'ignoreLoot' for the items you do not wish to loot
+///    6) Recall to your first lumber spot, run the script, and profit!
 /// 
 /// Permissions:
 /// You may use and distribute this script as you wish. For any modifications, please submit a pull request onto the github project page at: https://github.com/Qibbles/UOF-Fully-Automated-Lumberjack.

@@ -2,6 +2,13 @@
 ///	Fully automated LJ
 ///		by Kibbles (Discord: Kibbles#9429)
 ///
+/// This script automatically recall you to locations within your runebook, scans for and chops trees around you, teleports back to
+/// the bank set in your runebook (first rune), drops off the loot, and goes to the next lumber location.
+/// Healing and fighting are also taken care of. Script will attack any mobs within 1 tile, chase it down, and loot its corpse.
+/// 
+/// Red detection is present but unreliable. Script will scan and detect Red players within 25 tiles and attempt to recall back to bank,
+/// drop off loots, and recall to the next lumber location to continue.
+/// 
 /// Lumberjacker skills:
 /// - 120 Lumberjack
 /// - 100 Healing
@@ -29,9 +36,9 @@
 function AutoLumber()
 {
     // Change these variable values
-    var runebookSerial = "0x411195DE"
-    var regbagSerial = "0x43C7F58C"
-    var bankbagSerial = "0x43C7F581"
+    var runebookSerial = "0x411195DE" // Serial number of your runebook
+    var regbagSerial = "0x43C7F58C" // Serial number of the bag that holds your reagents in your bag to restock from
+    var bankbagSerial = "0x43C7F581" // Serial number of the bag in your bank to drop your lumber and loot into
 
     // Do not change anything below
 	var lumberLocation = 11; // Current location
@@ -163,10 +170,8 @@ function Remove(arr, idx)
 
 function FindTrees(range)
 {
-    var d = range;
-    
-    var treeCoords = [];
-    
+    var d = range; 
+    var treeCoords = []; 
     var found = 0;
     
     for (x = Player.X() - d; x < Player.X() + d; ++x)
@@ -176,10 +181,8 @@ function FindTrees(range)
             if (Orion.ValidateTargetTile('tree', x, y))
             {
                 PrintSelf('Tree at ' + x + ',' + y);
-            
                 var coord = { x: x, y: y};            
-                treeCoords.push(coord);
-            
+                treeCoords.push(coord); 
                 found++;                
             }
         }
@@ -202,9 +205,7 @@ function GetClosest(treeCoords)
     {
         var dx = Math.abs(px - treeCoords[i].x);
         var dy = Math.abs(py - treeCoords[i].y);
-    
         var dq = dx + dy;
-        
         if (dq < dsq)
         {
             dsq = dq;
@@ -219,7 +220,6 @@ function InRange(x, y)
 {
     var dx = Math.abs(Player.X() - x);
     var dy = Math.abs(Player.Y() - y);
-    
     return dx < 2 && dy < 2;    
 }
 
@@ -324,7 +324,7 @@ function FastLoot(listName, all, clear, useSkining)
 function LootLag()
 {
     var timer = Orion.Now() + 300;
-
+    
     while (!Orion.FindType('-1', '-1', 'corpse').length && timer > Orion.Now())
         Orion.Wait(50);
 }
@@ -332,7 +332,6 @@ function LootLag()
 function Loot(listName, all, clear, useSkining)
 {
     var bag = '0x0E75';
-
     var lootBagList = Orion.FindType(bag);
 
     if (lootBagList.length)
@@ -470,4 +469,41 @@ function PrintSelf(msg)
     Orion.Wait(50);
     Orion.OptionScaleSpeech(oldUse);
 	Orion.OptionScaleSpeechDelay(oldDelay);
+}
+
+// Sentinel against Murderers and Criminals
+function Sentinel(runRed, useBandage, useHeal, usePot, magery, runebook, runeLocation)
+{
+	var bandageTimer = 0;
+	while (Player.Mobile())
+	{
+		if (runRed == 1)
+		{
+			var players = Orion.FindType('0x0190|0x0191', '-1', ground, 'near|human|live|', '25', 'red|gray|criminal');
+			if (players.length)
+			{
+				Recall(magery, runebook, runeLocation);
+				Orion.CharPrint(self, 30, 'Red detected! Recalling!');
+				Orion.Wait(4000);
+				Orion.UseSkill('hiding');
+				Orion.Terminate('all');
+			}
+		}
+		//if (Player.Hits() < Player.MaxHits() && Orion.Now() > bandageTimer)
+		if (Player.Hits() < Player.MaxHits())
+		{
+			//if (useBandage == 1)
+			//{
+				Orion.BandageTarget(self);
+				//bandageTimer = Orion.Now() + 14000;
+				Orion.Wait(14000);
+			//}
+			//if (useHeal == 1)
+			//{
+				//Orion.CastTarget('greater heal', self);
+				//Orion.Wait(3000);
+			//}
+		}
+	}
+	return;
 }

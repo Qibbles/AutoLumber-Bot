@@ -2,6 +2,12 @@
 
 This is a fully automated lumberjack script for the Orion client on the UO Forever Shard by Kibbles. 
 
+The script will recall you to locations within your runebook, scan for and chop trees around you, recalls back to the bank set in your runebook (first rune), drops off the loot, and goes to the next lumber location.
+
+Healing and fighting are also taken care of. Script will attack any mobs within 1 tile, chase it down, and loot its corpse.
+
+Red detection is present but unreliable. Script will scan and detect Red players within 25 tiles and attempt to recall back to bank, drop off loots, and recall to the next lumber location to continue.
+
 If you wish to contribute to the project, provide feedback, or just talk about anything, please feel free to hit me up on discord. 
 
 My discord username is Kibbles#9429.
@@ -16,11 +22,26 @@ Lumberjacker skills:
 - 64 Magery
 - Anything you wish
 
-The script will recall you to locations within your runebook, scan for and chop trees around you, recalls back to the bank set in your runebook (first rune), drops off the loot, and goes to the next lumber location.
+Spellbook:
+- Recall
+- Fully charged with Recall scrolls (optional)
 
-Healing and fighting are also taken care of. Script will attack any mobs within 1 tile, chase it down, and loot its corpse.
+Equipment:
+- GM Axes (Double axes are the best)
+- 5-10 of each Recall Reagents (Black Pearl, Blood Moss, Mandrake Root). You may set the quantity to be restocked in the script
+- 40 bandaids (recommended). You may bring more if your skills are low and it takes a long time to kill the snakes
+- Runebook with 6 runes (Bank rune in position 1, 5 locations to LJ). You may add as many LJ location runes as you wish
 
-Red detection is present but unreliable. Script will scan and detect Red players within 25 tiles and attempt to recall back to bank, drop off loots, and recall to the next lumber location to continue.
+## Setup
+When creating your character, the 3 skills to pick (in order of priority) are healing, Lumberjack, Magery.
+
+Begin by macroing, in a dungeon:
+1) Healing to 90 (or more). Anatomy should be 100 by then.
+2) Magery to 62 (or more).
+
+Purchase from NPC the other skills and then you may start scripting!
+
+Character setup should take 1-2 hours at the very most.
 
 Things to set in the script:
     1) Runebook serial (Your runebook should have a bank spot rune and a recommended 5 or more lumber spots)

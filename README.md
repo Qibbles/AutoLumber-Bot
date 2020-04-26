@@ -2,7 +2,7 @@
 
 This is a fully automated lumberjack script for the Orion client on the UO Forever Shard by Kibbles. 
 
-If you wish to contribute to the project or just talk about anything, please feel free to hit me up on discord. 
+If you wish to contribute to the project, provide feedback, or just talk about anything, please feel free to hit me up on discord. 
 
 My discord username is Kibbles#9429.
 
@@ -33,12 +33,11 @@ Things to set in the script:
 Enjoy!
 
 ## Permissions:
-This script is provided to you for free. 
+This script is provided to you for free as is. 
+
 You may use and distribute this script as you wish. For any modifications, please submit a pull request onto the github project page at: https://github.com/Qibbles/UOF-Fully-Automated-Lumberjack.
 
-If you would like to fork this script as a base for your own, please provide credits to me :)
+If you would like to fork this script as a base for your own, please feel free and all I ask is for some credits :)
 
 ## Links
 Links to my other scripts repos (UOSteam & Orion) coming soon!
-
-

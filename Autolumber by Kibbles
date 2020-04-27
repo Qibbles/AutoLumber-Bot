@@ -34,12 +34,12 @@
 
 function AutoLumber() // Main script to run
 {
-    // Change these variable values
-    var runebookSerial = "0x411195DE" // Serial number of your runebook
-    var regbagSerial = "0x43C7F58C" // Serial number of the bag that holds your reagents in your bag to restock from
-    var bankbagSerial = "0x43C7F581" // Serial number of the bag in your bank to drop your lumber and loot into
+	// Change these variable values
+	var runebookSerial = "0x411195DE" // Serial number of your runebook
+	var regbagSerial = "0x43C7F58C" // Serial number of the bag that holds your reagents in your bag to restock from
+	var bankbagSerial = "0x43C7F581" // Serial number of the bag in your bank to drop your lumber and loot into
 
-    // Do not change anything below
+	// Do not change anything below
 	var lumberLocation = 11; // Current location
 	Orion.Exec('Sentinel',true, ['1', '1', '0', '0', '1', runebookSerial, '5']);
 	var bandageTimer = 0;
@@ -65,8 +65,7 @@ function AutoLumber() // Main script to run
 			Orion.Wait(500);
 			LumberToChest();
 			Orion.Wait(5000);
-			if (lumberLocation >= 35)
-			{
+			if (lumberLocation >= 35) {
 				lumberLocation = 11; // Reset back to 2nd location in book
 			} else {
 				lumberLocation = lumberLocation + 6; // Next button ID
@@ -81,71 +80,63 @@ function AutoLumber() // Main script to run
      		var closest = GetClosest(treeCoords);
      		var treeCoord = treeCoords[closest];        
      		treeCoords = Remove(treeCoords, closest);
-        
      		Orion.Wait(500);
-        
      		Orion.WalkTo(treeCoord.x, treeCoord.y, 0);
-        
     		var timeout = Orion.Now() + 3000;
         
-       	while (!InRange(treeCoord.x, treeCoord.y) && Orion.Now() < timeout)
-       	{
-          		PrintSelf('.');
+       	while (!InRange(treeCoord.x, treeCoord.y) && Orion.Now() < timeout) {
+		PrintSelf('.');
      	      	Orion.Wait(200);
-       	}
-        
-       	if (InRange(treeCoord.x, treeCoord.y))
-       	{
+       	} 
+       	if (InRange(treeCoord.x, treeCoord.y)) {
        	    	LumberTree(treeCoord.x, treeCoord.y, axeSerial);
        	}
  	     	PrintSelf('Tree Finished');
-   	 }
+   	}
 		lumberLocation = lumberLocation + 6; // Go next location
 		Orion.Exec('AutoLumber', false);
 }
 
-function LumberRestock(){  
-    Orion.UseObject(regbagSerial);
-    Orion.Wait(500);
+function LumberRestock() {  
+	Orion.UseObject(regbagSerial);
+	Orion.Wait(500);
 
-    var restock = [
-    ['0x0F88',0], //ns
-    ['0x0F7B',10], //bm
-    ['0x0F7A', 10], //bp
-    ['0x0F84', 0], //ga
-    ['0x0F8C', 0], //sa
-    ['0x0F85', 0], //gs
-    ['0x0F86', 10], //mr
-    ['0x0F8D', 0], //ss
-    ['0x0E21', 40], //bandage
+	var restock = [
+	['0x0F88',0], //ns
+	['0x0F7B',10], //bm
+	['0x0F7A', 10], //bp
+	['0x0F84', 0], //ga
+	['0x0F8C', 0], //sa
+	['0x0F85', 0], //gs
+	['0x0F86', 10], //mr
+	['0x0F8D', 0], //ss
+	['0x0E21', 40], //bandage
 
-    ['0x1F4C', 0] //recallscroll
-    ];
+	['0x1F4C', 0] //recallscroll
+	];
    
-    var countrows = restock.length;
-    Orion.Print(countrows + ' items to restock');
-    for (i=0; i < countrows-1; i++){
-        // Verify if more is needed
-        var bagitem = Orion.Count(restock[i][0]);
-        if (bagitem < restock[i][1]){
-            itemfound = Orion.FindType(restock[i][0], '-1', bagserial);
-            if (itemfound.length){
-                Orion.MoveItem(itemfound[0], restock[i][1]-bagitem);
-                Orion.Wait(600);
-            }
-        }
-    }
+	var countrows = restock.length;
+	Orion.Print(countrows + ' items to restock');
+	for (i=0; i < countrows-1; i++) {
+		// Verify if more is needed
+		var bagitem = Orion.Count(restock[i][0]);
+		if (bagitem < restock[i][1]) {
+		    itemfound = Orion.FindType(restock[i][0], '-1', bagserial);
+		    if (itemfound.length) {
+			Orion.MoveItem(itemfound[0], restock[i][1]-bagitem);
+			Orion.Wait(600);
+			}
+		}
+	}
 }
 
 function LumberToChest()
 {
 	Orion.Say('Bank');
 	var sorttobag = Orion.FindList('LumberLoot', 'backpack', '', 1);
-	if(sorttobag.length)
-	{
+	if(sorttobag.length) {
 		var sort = sorttobag.length;
-		for (i = 0; i < sort; i++)
-		{
+		for (i = 0; i < sort; i++) {
 			Orion.MoveItem(sorttobag[i], 0, bankbagSerial);
 			Orion.Wait(600);
 		}
@@ -155,16 +146,13 @@ function LumberToChest()
 // Helper functions for AutoLumber
 function Remove(arr, idx)
 {
-    var result = [];
-    for (var i = 0; i < arr.length; ++i)
-    {
-        if (i != idx)
-        {
-	        result.push(arr[i]);
-	  }
-    }
-    
-    return result;
+	var result = [];
+	for (var i = 0; i < arr.length; ++i) {
+        	if (i != idx) {
+	        	result.push(arr[i]);
+	  	}
+	}
+	return result;
 }
 
 function FindTrees(range)
@@ -265,7 +253,6 @@ function LumberTree(x, y, axeSerial)
 
         if (Orion.InJournal(end) || Orion.InJournal(tooFar))
             return;
-    
     }            
 }
 

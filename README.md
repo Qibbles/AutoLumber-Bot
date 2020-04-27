@@ -46,8 +46,8 @@ Things to set in the script and Orion Assistant:
 1. Runebook serial (Your runebook should have a bank spot rune and a recommended 5 or more lumber spots)
 2. Reg bag serial (This is a bag in your bank with the required reagents for recalling - BP | BM | MR)
 3. Drop bag serial (This is a bag in your bank to deposit your gold and logs)
-4. Create a list (Lists -> Find) called **lumberLoot** with all the items you would like to unload to your bank 
-5. Create an ignore list (List -> Ignore) called **ignoreLoot** for the items you do not wish to loot
+4. Create a list (Lists -> Find) called **'lumberLoot'** with all the items you would like to unload to your bank 
+5. Create an ignore list (List -> Ignore) called **'ignoreLoot'** for the items you do not wish to loot
 6. Recall to your first lumber spot, run the script (AutoLumber()), and profit!
 
 Lists -> Find - lumberLoot | Lists -> Ignore - ignoreLoot

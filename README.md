@@ -48,9 +48,10 @@ Things to set in the script:
     2) Reg bag serial (This is a bag in your bank with the required reagents for recalling - BP | BM | MR)
     3) Drop bag serial (This is a bag in your bank to deposit your gold and logs)
     4) Create a list (Lists -> Find) called 'LumberLoot' with all the items you would like to unload to your bank 
-<img src="https://camo.githubusercontent.com/43ee5a79611e14694338abe79cef79b35eace4f8/687474703a2f2f7777772e696d61676575702e72752f696d673239302f323731333036322f7461625f6c697374735f66696e642e706e67" width=120>
     5) Create an ignore list called 'ignoreLoot' for the items you do not wish to loot
     6) Recall to your first lumber spot, run the script (AutoLumber()), and profit!
+    
+<img src="https://camo.githubusercontent.com/43ee5a79611e14694338abe79cef79b35eace4f8/687474703a2f2f7777772e696d61676575702e72752f696d673239302f323731333036322f7461625f6c697374735f66696e642e706e67" width=200>
 
 Enjoy!
 

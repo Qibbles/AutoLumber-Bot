@@ -142,7 +142,7 @@ function LumberRestock(){
 function LumberToChest()
 {
 	Orion.Say('Bank');
-	var sorttobag = Orion.FindList('lumberLoot', 'backpack', '', 1);
+	var sorttobag = Orion.FindList('LumberLoot', 'backpack', '', 1);
 	if(sorttobag.length)
 	{
 		var sort = sorttobag.length;
@@ -283,11 +283,11 @@ function FightMob(mobs)
 		Orion.Wait(100);
 	}
 	Orion.CharPrint('self', 30, 'Creature killed, looting corpse');
-	lumberLoot();
+	LumberLoot();
 	return;
 }
 
-function lumberLoot()
+function LumberLoot()
 {
     //1 - loot all; 0 - loot prioritized items
     var all = 1;
@@ -295,7 +295,7 @@ function lumberLoot()
     var clear = 1;
     //1 - use skinning
     var useSkining = 0;
-    FastLoot('lumberLoot', all, clear, useSkining);
+    FastLoot('LumberLoot', all, clear, useSkining);
 }
 
 function FastLoot(listName, all, clear, useSkining)
